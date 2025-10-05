@@ -4,7 +4,6 @@
 
 namespace Engine2D
 {
-    class CircleBody;
     struct Collision
     {
         bool isCollision;
@@ -12,5 +11,11 @@ namespace Engine2D
         float collisonDepth;
     };
 
-    Collision getCollisionCircleCircle(const CircleBody& c1, const CircleBody& c2);
+    struct CircleColideData
+    {
+        Vector2D pos;
+        float radius;
+    };
+
+    Collision getCollisionCircleCircle(const CircleColideData& c1, const CircleColideData& c2);
 }

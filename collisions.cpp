@@ -1,13 +1,12 @@
 #include "collisions.hpp"
-#include"body.hpp"
 
-Engine2D::Collision Engine2D::getCollisionCircleCircle(const CircleBody &c1, const CircleBody &c2)
+Engine2D::Collision Engine2D::getCollisionCircleCircle(const CircleColideData &c1, const CircleColideData &c2)
 {
     Collision collision;
-    const Vector2D p1 = c1.getPosition();
-    const Vector2D p2 = c2.getPosition();
+    const Vector2D p1 = c1.pos;
+    const Vector2D p2 = c2.pos;
                               //Sum of radiuses                   //Distance
-    collision.collisonDepth = (c1.getRadius() + c2.getRadius()) - (p1.distance(p2));
+    collision.collisonDepth = (c1.radius + c2.radius) - (p1.distance(p2));
 
     //if radiuses are bigger then distance, isCollision = true
     if(collision.collisonDepth <= 0.0f)

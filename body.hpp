@@ -1,6 +1,8 @@
 #pragma once
 
 #include"vector2d.hpp"
+#include"collisions.hpp"
+#include<vector>
 
 namespace Engine2D
 {
@@ -10,7 +12,6 @@ namespace Engine2D
         rectangle = 1,
         polygon = 2
     };
-    struct Collision;
     class Body
     {
         protected:
@@ -42,5 +43,17 @@ namespace Engine2D
             float getRadius() const {return radius;}
         private:
             float radius;
+    };
+
+    class RectangleBody: public Body
+    {
+        public:
+            RectangleBody(const Vector2D& position, float width, float height, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
+            void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
+            Collision getCollision(const Body& body) const override;
+            std::vector<Vector2D> getVertices() const;
+        private:
+            float width;
+            float height;
     };
 };

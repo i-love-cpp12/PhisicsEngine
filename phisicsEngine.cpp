@@ -5,10 +5,10 @@ Engine2D::PhisicsEngine::PhisicsEngine(const Vector2D &windowsSize, const std::s
     InitWindow(windowsSize.x, windowsSize.y, title.c_str());
     SetTargetFPS(FPS);
 
-    bodies.push_back(std::make_unique<CircleBody>(Vector2D{100.0f, 100.0f}, 50.0f, circle));
-    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, circle));
-    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, circle));
-    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, circle));
+    bodies.push_back(std::make_unique<CircleBody>(Vector2D{100.0f, 100.0f}, 50.0f, 1.0f));
+    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, 10.0f));
+    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, 20.0f));
+    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 300.0f}, 50.0f, 100.0f));
 }
 
 Engine2D::PhisicsEngine::~PhisicsEngine()
@@ -32,8 +32,9 @@ void Engine2D::PhisicsEngine::update()
         for(size_t j = i + 1; j < bodies.size(); ++j)
         {
             Collision collision = bodies[i]->getCollision(*bodies[j]);
-            bodies[i]->moveTo(bodies[i]->getPosition() + collision.normal * (collision.collisonDepth / 2.0f));
-            bodies[j]->moveTo(bodies[j]->getPosition() + -collision.normal * (collision.collisonDepth / 2.0f));
+
+            bodies[i]->moveTo(bodies[i]->getPosition() + collision.normal * (collision.collisonDepth * 0.5f));
+            bodies[j]->moveTo(bodies[j]->getPosition() + -collision.normal * (collision.collisonDepth * 0.5f));
         }
     }
 }

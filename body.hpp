@@ -29,6 +29,7 @@ namespace Engine2D
             virtual Collision getCollision(const Body& body) const = 0;
             BodyType getType() const {return type;}
             Vector2D getPosition() const {return position;}
+            float getWeight() const {return weight;}
             void moveTo(const Vector2D& newPos);
     };
 

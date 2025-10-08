@@ -6,9 +6,9 @@ Engine2D::Transform::Transform(const Vector2D& rotationCenter, float rotation): 
 
 Engine2D::Vector2D Engine2D::Transform::apply(const Transform &transform, const Vector2D& point)
 {
-    const Vector2D distance = point - transform.rotationCenter;
 
-    const Vector2D rotation = Vector2D(distance.x * transform.cos - distance.y * transform.sin,
-                                        distance.x * transform.sin - distance.y * transform.cos);
-    return transform.rotationCenter + rotation;
+    return Vector2D
+        (transform.rotationCenter.x * transform.cos - transform.rotationCenter.y * transform.sin,
+        transform.rotationCenter.x * transform.sin - transform.rotationCenter.y * transform.cos)
+        + transform.rotationCenter;
 }

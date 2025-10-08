@@ -58,8 +58,8 @@ namespace Engine2D
             PolygonBody(const Vector2D& position, std::vector<Vector2D> localVertecies, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
             void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
             Collision getCollision(const Body& body) const override;
-        private:
             std::vector<Vector2D>& getVertesies() const;
+        private:
             void applyVertesies() const;
             mutable std::vector<Vector2D> appliedVertecies;
             std::vector<Vector2D> localVertecies;

@@ -56,18 +56,19 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
     {
         case circle:
         {
-            CircleBody otherCircle = static_cast<const CircleBody&>(body);
+            const CircleBody& otherCircle = static_cast<const CircleBody&>(body);
             return getCollisionCircleCircle({position, radius}, {otherCircle.getPosition(), otherCircle.getRadius()});
         }
         break;
 
         case polygon:
         {
-            return Collision();
+            const PolygonBody& otherPolygon = static_cast<const PolygonBody&>(body);
+            return getCollisionCirclePolygon({position, radius}, {otherPolygon.getPosition(), otherPolygon.getVertesies()});
         }
         break;
     };
-    return Collision();
+    throw new std::runtime_error("not valid body");
 }
 
 Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float weight, bool isStatic, float dencity, float restitution):
@@ -106,16 +107,19 @@ Engine2D::Collision Engine2D::PolygonBody::getCollision(const Body &body) const
     {
         case circle:
         {
+            const CircleBody& otherCircle = static_cast<const CircleBody&>(body);
+            return getCollisionCirclePolygon({otherCircle.getPosition(), otherCircle.getRadius()}, {position, getVertesies()});
         }
         break;
 
         case polygon:
         {
-            return Collision();
+            const PolygonBody& otherPolygon = static_cast<const PolygonBody&>(body);
+            return getCollisionPolygonPolygon({position, getVertesies()}, {otherPolygon.position, otherPolygon.getVertesies()});
         }
         break;
     };
-    return Collision();
+    throw new std::runtime_error("not valid body");
 }
 
 std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() const

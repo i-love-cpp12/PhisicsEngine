@@ -23,3 +23,13 @@ Engine2D::Collision Engine2D::getCollisionCircleCircle(const CircleColideData &c
 
     return collision;
 }
+
+Engine2D::Collision Engine2D::getCollisionPolygonPolygon(const PolygonColideData &p1, const PolygonColideData &p2)
+{
+    return Collision();
+}
+
+Engine2D::Collision Engine2D::getCollisionCirclePolygon(const CircleColideData &c, const PolygonColideData &p)
+{
+    return Collision();
+}

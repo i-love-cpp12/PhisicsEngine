@@ -2,7 +2,9 @@
 
 #include"vector2d.hpp"
 #include"collisions.hpp"
+#include"transform.hpp"
 #include<vector>
+#include<array>
 
 namespace Engine2D
 {
@@ -25,6 +27,7 @@ namespace Engine2D
             float restitution;// 0-1
             bool isStatic;
             BodyType type;
+            bool movementNotApplied;
         public:
             virtual void draw(Color color = WHITE, float strokeSize = 0.0f) const = 0;
             virtual Collision getCollision(const Body& body) const = 0;
@@ -32,6 +35,8 @@ namespace Engine2D
             Vector2D getPosition() const {return position;}
             float getWeight() const {return weight;}
             void moveTo(const Vector2D& newPos);
+            void moveBy(const Vector2D& amount);
+            void rotate(float amount);
     };
 
     class CircleBody: public Body
@@ -51,9 +56,12 @@ namespace Engine2D
             RectangleBody(const Vector2D& position, float width, float height, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
             void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
             Collision getCollision(const Body& body) const override;
-            std::vector<Vector2D> getVertices() const;
         private:
+            std::array<Vector2D, 4>& getVertices();
+            void applyVertecies();
             float width;
             float height;
+            std::array<Vector2D, 4> appliedVertecies;
+            std::array<Vector2D, 4> localVertecies;
     };
 };

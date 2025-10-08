@@ -25,7 +25,7 @@ void Engine2D::PhisicsEngine::update()
     const float SPEED = 200.0f;
     const float dt = GetFrameTime();
 
-    bodies[0]->moveTo(bodies[0]->getPosition() + (input * SPEED * dt));
+    bodies[0]->moveBy(input * SPEED * dt);
 
     for(size_t i = 0; i < bodies.size() - 1; ++i)
     {
@@ -33,8 +33,8 @@ void Engine2D::PhisicsEngine::update()
         {
             Collision collision = bodies[i]->getCollision(*bodies[j]);
 
-            bodies[i]->moveTo(bodies[i]->getPosition() + collision.normal * (collision.collisonDepth * 0.5f));
-            bodies[j]->moveTo(bodies[j]->getPosition() + -collision.normal * (collision.collisonDepth * 0.5f));
+            bodies[i]->moveBy(collision.normal * (collision.collisonDepth * 0.5f));
+            bodies[j]->moveBy(-collision.normal * (collision.collisonDepth * 0.5f));
         }
     }
 }

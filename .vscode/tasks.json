@@ -11,6 +11,7 @@
                 "body.cpp",
                 "collisions.cpp",
                 "printable.cpp",
+                "transform.cpp",
                 "-fdiagnostics-color=always",
                 "-g",
                 "-o",

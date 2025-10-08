@@ -9,13 +9,27 @@ Engine2D::Body::Body(const Vector2D &position, float weight, BodyType type, bool
     dencity(dencity),
     restitution(restitution),
     isStatic(isStatic),
-    type(type)
+    type(type),
+    movementNotApplied(true)
 {
 }
 
 void Engine2D::Body::moveTo(const Vector2D& newPos)
 {
     position = newPos;
+    movementNotApplied = true;
+}
+
+void Engine2D::Body::moveBy(const Vector2D &amount)
+{
+    position = position + amount;
+    movementNotApplied = true;
+}
+
+void Engine2D::Body::rotate(float amount)
+{
+    rotation += amount;
+    movementNotApplied = true;
 }
 
 Engine2D::CircleBody::CircleBody(const Vector2D &position, float radius, float weight, bool isStatic, float dencity, float restitution):
@@ -57,7 +71,13 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
 }
 
 Engine2D::RectangleBody::RectangleBody(const Vector2D &position, float width, float height, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, rectangle, isStatic, 0.0f, dencity, restitution), width(width), height(height)
+    Engine2D::Body::Body(position, weight, rectangle, isStatic, 0.0f, dencity, restitution), width(width), height(height),
+    localVertecies({
+        Vector2D(-width / 2, -height / 2),
+        Vector2D(width / 2, -height / 2),
+        Vector2D(width / 2, height / 2),
+        Vector2D(-width / 2, height / 2)
+    })
 {
 }
 
@@ -92,7 +112,20 @@ Engine2D::Collision Engine2D::RectangleBody::getCollision(const Body &body) cons
     return Collision();
 }
 
-std::vector<Engine2D::Vector2D> Engine2D::RectangleBody::getVertices() const
+std::array<Engine2D::Vector2D, 4>& Engine2D::RectangleBody::getVertices()
 {
-    return std::vector<Vector2D>();
+    if(movementNotApplied)
+    {
+        applyVertecies();
+        movementNotApplied = false;
+    }
+    return appliedVertecies;
+}
+
+void Engine2D::RectangleBody::applyVertecies()
+{
+    for(size_t i = 0; i < localVertecies.size(); ++i)
+    {
+        appliedVertecies[i] = Transform::apply(Transform(position, rotation), localVertecies[i]);
+    }
 }

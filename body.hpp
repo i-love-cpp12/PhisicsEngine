@@ -27,7 +27,7 @@ namespace Engine2D
             float restitution;// 0-1
             bool isStatic;
             BodyType type;
-            mutable bool movementNotApplied;
+            bool movementNotApplied;
         public:
             virtual void draw(Color color = WHITE, float strokeSize = 0.0f) const = 0;
             virtual Collision getCollision(const Body& body) const = 0;
@@ -60,8 +60,8 @@ namespace Engine2D
             Collision getCollision(const Body& body) const override;
             std::vector<Vector2D>& getVertesies() const;
         private:
-            void applyVertesies() const;
-            mutable std::vector<Vector2D> appliedVertecies;
+            void applyVertesies();
+            std::vector<Vector2D> appliedVertecies;
             std::vector<Vector2D> localVertecies;
     };
 };

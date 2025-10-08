@@ -124,15 +124,16 @@ Engine2D::Collision Engine2D::PolygonBody::getCollision(const Body &body) const
 
 std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() const
 {
+    PolygonBody* self = const_cast<PolygonBody*>(this);
     if(movementNotApplied)
     {
-        applyVertesies();
-        movementNotApplied = false;
+        self->applyVertesies();
+        self->movementNotApplied = false;
     }
-    return appliedVertecies;
+    return self->appliedVertecies;
 }
 
-void Engine2D::PolygonBody::applyVertesies() const
+void Engine2D::PolygonBody::applyVertesies()
 {
     for(size_t i = 0; i < localVertecies.size(); ++i)
     {

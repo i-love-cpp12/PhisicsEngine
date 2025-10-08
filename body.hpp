@@ -58,11 +58,11 @@ namespace Engine2D
             void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
             Collision getCollision(const Body& body) const override;
         private:
-            std::array<Vector2D, 4>& getVertices();
+            std::vector<Vector2D>& getVertices();
             void applyVertecies();
             float width;
             float height;
-            std::array<Vector2D, 4> appliedVertecies;
-            std::array<Vector2D, 4> localVertecies;
+            std::vector<Vector2D> appliedVertecies;
+            std::vector<Vector2D> localVertecies;
     };
 };

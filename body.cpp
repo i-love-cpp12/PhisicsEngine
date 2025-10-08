@@ -118,7 +118,7 @@ Engine2D::Collision Engine2D::RectangleBody::getCollision(const Body &body) cons
     return Collision();
 }
 
-std::array<Engine2D::Vector2D, 4>& Engine2D::RectangleBody::getVertices()
+std::vector<Engine2D::Vector2D>& Engine2D::RectangleBody::getVertices()
 {
     if(movementNotApplied)
     {

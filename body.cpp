@@ -26,7 +26,13 @@ void Engine2D::Body::moveBy(const Vector2D &amount)
     movementNotApplied = true;
 }
 
-void Engine2D::Body::rotate(float amount)
+void Engine2D::Body::rotateTo(float newRotation)
+{
+    rotation = newRotation;
+    movementNotApplied = true;
+}
+
+void Engine2D::Body::rotateBy(float amount)
 {
     rotation += amount;
     movementNotApplied = true;

@@ -36,7 +36,8 @@ namespace Engine2D
             float getWeight() const {return weight;}
             void moveTo(const Vector2D& newPos);
             void moveBy(const Vector2D& amount);
-            void rotate(float amount);
+            void rotateTo(float newRotation);
+            void rotateBy(float amount);
     };
 
     class CircleBody: public Body

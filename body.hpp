@@ -27,7 +27,7 @@ namespace Engine2D
             float restitution;// 0-1
             bool isStatic;
             BodyType type;
-            bool movementNotApplied;
+            mutable bool movementNotApplied;
         public:
             virtual void draw(Color color = WHITE, float strokeSize = 0.0f) const = 0;
             virtual Collision getCollision(const Body& body) const = 0;
@@ -51,18 +51,17 @@ namespace Engine2D
             float radius;
     };
 
-    class RectangleBody: public Body
+    class PolygonBody: public Body
     {
         public:
-            RectangleBody(const Vector2D& position, float width, float height, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
+            PolygonBody(const Vector2D& position, float width, float height, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
+            PolygonBody(const Vector2D& position, std::vector<Vector2D> localVertecies, float weight, bool isStatic = false, float dencity = 1.0f, float restitution = 0.5f);
             void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
             Collision getCollision(const Body& body) const override;
         private:
-            std::vector<Vector2D>& getVertices();
-            void applyVertecies();
-            float width;
-            float height;
-            std::vector<Vector2D> appliedVertecies;
+            std::vector<Vector2D>& getVertesies() const;
+            void applyVertesies() const;
+            mutable std::vector<Vector2D> appliedVertecies;
             std::vector<Vector2D> localVertecies;
     };
 };

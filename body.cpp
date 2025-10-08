@@ -61,12 +61,6 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
         }
         break;
 
-        case rectangle:
-        {
-            return Collision();
-        }
-        break;
-
         case polygon:
         {
             return Collision();
@@ -76,8 +70,8 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
     return Collision();
 }
 
-Engine2D::RectangleBody::RectangleBody(const Vector2D &position, float width, float height, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, rectangle, isStatic, 0.0f, dencity, restitution), width(width), height(height),
+Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float weight, bool isStatic, float dencity, float restitution):
+    Engine2D::Body::Body(position, weight, polygon, isStatic, 0.0f, dencity, restitution),
     localVertecies({
         Vector2D(-width / 2, -height / 2),
         Vector2D(width / 2, -height / 2),
@@ -87,25 +81,31 @@ Engine2D::RectangleBody::RectangleBody(const Vector2D &position, float width, fl
 {
 }
 
-void Engine2D::RectangleBody::draw(Color color, float strokeSize) const
+Engine2D::PolygonBody::PolygonBody(const Vector2D &position, std::vector<Vector2D> localVertecies, float weight, bool isStatic, float dencity, float restitution):
+    Engine2D::Body::Body(position, weight, polygon, isStatic, 0.0f, dencity, restitution),
+    localVertecies(localVertecies)
 {
-    Rectangle rect = {position.x, position.y, width, height};
-    DrawRectanglePro(rect, {width / 2.0f, height / 2.0f}, rotation, color);
-    DrawRectangleLinesEx({rect.x, rect.y, rect.width - strokeSize, rect.height - strokeSize}, strokeSize, BLACK);
 }
 
-Engine2D::Collision Engine2D::RectangleBody::getCollision(const Body &body) const
+void Engine2D::PolygonBody::draw(Color color, float strokeSize) const
+{
+    // Rectangle rect = {position.x, position.y, width, height};
+    // DrawRectanglePro(rect, {width / 2.0f, height / 2.0f}, rotation, color);
+    // DrawRectangleLinesEx({rect.x, rect.y, rect.width - strokeSize, rect.height - strokeSize}, strokeSize, BLACK);
+    // DraW
+    std::vector<Vector2D> vertesies = getVertesies();
+    for(size_t i = 1; i < vertesies.size(); ++i)
+    {
+        DrawLineV(vertesies[i - 1].toRaylibVector(), vertesies[i].toRaylibVector(), BLACK);
+    }
+}
+
+Engine2D::Collision Engine2D::PolygonBody::getCollision(const Body &body) const
 {
     switch(body.getType())
     {
         case circle:
         {
-        }
-        break;
-
-        case rectangle:
-        {
-            return Collision();
         }
         break;
 
@@ -118,17 +118,17 @@ Engine2D::Collision Engine2D::RectangleBody::getCollision(const Body &body) cons
     return Collision();
 }
 
-std::vector<Engine2D::Vector2D>& Engine2D::RectangleBody::getVertices()
+std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() const
 {
     if(movementNotApplied)
     {
-        applyVertecies();
+        applyVertesies();
         movementNotApplied = false;
     }
     return appliedVertecies;
 }
 
-void Engine2D::RectangleBody::applyVertecies()
+void Engine2D::PolygonBody::applyVertesies() const
 {
     for(size_t i = 0; i < localVertecies.size(); ++i)
     {

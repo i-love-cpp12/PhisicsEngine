@@ -122,7 +122,7 @@ Engine2D::Collision Engine2D::PolygonBody::getCollision(const Body &body) const
     throw new std::runtime_error("not valid body");
 }
 
-std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() const
+const std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() const
 {
     PolygonBody* self = const_cast<PolygonBody*>(this);
     if(movementNotApplied)

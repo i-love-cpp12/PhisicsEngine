@@ -11,15 +11,15 @@
 
 namespace Engine2D
 {
-    class PhisicsEngine
+    class PhyisicsEngine
     {
         public:
-            PhisicsEngine(const Vector2D& windowsSize, const std::string& title, unsigned short FPS);
-            ~PhisicsEngine();
+            PhyisicsEngine(const Vector2D& windowsSize, const std::string& title, unsigned short FPS);
+            ~PhyisicsEngine();
             void draw() const;
             void update();
         private:
-            std::vector<std::unique_ptr<Body>> bodies;
-            // std::vector<Color> colors;
+            std::vector<std::unique_ptr<PolygonBody>> bodies;
+            std::vector<Color> colors;
     };
 };

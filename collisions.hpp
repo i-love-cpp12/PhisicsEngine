@@ -2,6 +2,8 @@
 
 #include"vector2d.hpp"
 #include<vector>
+#include"math.hpp"
+#include<functional>
 
 namespace Engine2D
 {

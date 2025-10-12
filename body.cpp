@@ -71,8 +71,8 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
     throw new std::runtime_error("not valid body");
 }
 
-Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, polygon, isStatic, 0.0f, dencity, restitution),
+Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float rotation, float weight, bool isStatic, float dencity, float restitution):
+    Engine2D::Body::Body(position, weight, polygon, isStatic, rotation, dencity, restitution),
     localVertecies({
         Vector2D(-width / 2, -height / 2),
         Vector2D(width / 2, -height / 2),
@@ -80,24 +80,22 @@ Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float 
         Vector2D(-width / 2, height / 2)
     })
 {
+    appliedVertecies.resize(localVertecies.size());
 }
 
-Engine2D::PolygonBody::PolygonBody(const Vector2D &position, std::vector<Vector2D> localVertecies, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, polygon, isStatic, 0.0f, dencity, restitution),
+Engine2D::PolygonBody::PolygonBody(const Vector2D &position, std::vector<Vector2D> localVertecies, float rotation, float weight, bool isStatic, float dencity, float restitution):
+    Engine2D::Body::Body(position, weight, polygon, isStatic, rotation, dencity, restitution),
     localVertecies(localVertecies)
 {
+    appliedVertecies.resize(localVertecies.size());
 }
 
 void Engine2D::PolygonBody::draw(Color color, float strokeSize) const
 {
-    // Rectangle rect = {position.x, position.y, width, height};
-    // DrawRectanglePro(rect, {width / 2.0f, height / 2.0f}, rotation, color);
-    // DrawRectangleLinesEx({rect.x, rect.y, rect.width - strokeSize, rect.height - strokeSize}, strokeSize, BLACK);
-    // DraW
     std::vector<Vector2D> vertesies = getVertesies();
-    for(size_t i = 1; i < vertesies.size(); ++i)
+    for(size_t i = 0; i < vertesies.size(); ++i)
     {
-        DrawLineV(vertesies[i - 1].toRaylibVector(), vertesies[i].toRaylibVector(), BLACK);
+        DrawLineV(vertesies[i].toRaylibVector(), vertesies[(i + 1) % vertesies.size()].toRaylibVector(), color);
     }
 }
 
@@ -135,8 +133,9 @@ const std::vector<Engine2D::Vector2D>& Engine2D::PolygonBody::getVertesies() con
 
 void Engine2D::PolygonBody::applyVertesies()
 {
-    for(size_t i = 0; i < localVertecies.size(); ++i)
+    Transform t = Transform(position, rotation);
+    for(size_t i = 0; i < appliedVertecies.size(); ++i)
     {
-        appliedVertecies[i] = Transform::apply(Transform(position, rotation), localVertecies[i]);
+        appliedVertecies[i] = Transform::apply(t, localVertecies[i]);
     }
 }

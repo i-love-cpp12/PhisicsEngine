@@ -12,6 +12,7 @@
                 "collisions.cpp",
                 "printable.cpp",
                 "transform.cpp",
+                "physicsProperties.cpp",
                 "-fdiagnostics-color=always",
                 "-g",
                 "-o",

@@ -1,14 +1,11 @@
 #include "body.hpp"
 
-Engine2D::Body::Body(const Vector2D &position, float weight, BodyType type, bool isStatic, float rotation, float dencity, float restitution):
+Engine2D::Body::Body(const Vector2D& position, float rotation, BodyType type, const PhysicsProperties& properties):
     position(position),
     linearVelocity({0.0f, 0.0f}),
     rotation(rotation),
     angularVelocity(0.0f),
-    weight(weight),
-    dencity(dencity),
-    restitution(restitution),
-    isStatic(isStatic),
+    properties(properties),
     type(type),
     movementNotApplied(true)
 {
@@ -38,8 +35,8 @@ void Engine2D::Body::rotateBy(float amount)
     movementNotApplied = true;
 }
 
-Engine2D::CircleBody::CircleBody(const Vector2D &position, float radius, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, circle, isStatic, 0.0f, dencity, restitution), radius(radius)
+Engine2D::CircleBody::CircleBody(const Vector2D& position, float radius, const PhysicsProperties& properties):
+    Engine2D::Body::Body(position, 0.0f, circle, properties), radius(radius)
 {
 }
 
@@ -71,8 +68,8 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
     throw new std::runtime_error("not valid body");
 }
 
-Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float rotation, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, polygon, isStatic, rotation, dencity, restitution),
+Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float height, float rotation, const PhysicsProperties& properties):
+    Engine2D::Body::Body(position, rotation, polygon, properties),
     localVertecies({
         Vector2D(-width / 2, -height / 2),
         Vector2D(width / 2, -height / 2),
@@ -83,8 +80,8 @@ Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float 
     appliedVertecies.resize(localVertecies.size());
 }
 
-Engine2D::PolygonBody::PolygonBody(const Vector2D &position, std::vector<Vector2D> localVertecies, float rotation, float weight, bool isStatic, float dencity, float restitution):
-    Engine2D::Body::Body(position, weight, polygon, isStatic, rotation, dencity, restitution),
+Engine2D::PolygonBody::PolygonBody(const Vector2D& position, std::vector<Vector2D> localVertecies, float rotation, const PhysicsProperties& properties):
+    Engine2D::Body::Body(position, rotation, polygon, properties),
     localVertecies(localVertecies)
 {
     appliedVertecies.resize(localVertecies.size());

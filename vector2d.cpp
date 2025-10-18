@@ -105,6 +105,11 @@ float Engine2D::Vector2D::getDotProduct(const Vector2D &other) const
     return x * other.x + y * other.y;
 }
 
+Vector2D Engine2D::Vector2D::perp() const
+{
+    return Vector2D(-y, x);
+}
+
 std::ostream &Engine2D::Vector2D::print(std::ostream &stream) const
 {
     stream<<"(x: "<<x<<" y: "<<y<<')';

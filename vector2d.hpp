@@ -44,6 +44,8 @@ namespace Engine2D
             Vector2D getNormalized() const;
             
             float getDotProduct(const Vector2D &other) const;
+
+            Vector2D perp() const;
         private:
             std::ostream& print(std::ostream& stream) const override;
     };

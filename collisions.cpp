@@ -1,5 +1,37 @@
 #include "collisions.hpp"
 
+Engine2D::MinMax<float> Engine2D::projectVertesies(const std::vector<Vector2D> &vertesies, const Vector2D axe)
+{
+    MinMax<float> minmax;
+    minmax.max = minmax.min = vertesies[0].getDotProduct(axe);
+
+    for(size_t i = 1; i < vertesies.size(); ++i)
+    {
+        float projected = vertesies[i].getDotProduct(axe);
+        if(projected > minmax.max) minmax.max = projected;
+        if(projected < minmax.min) minmax.min = projected;
+    }
+    return minmax;
+}
+
+float Engine2D::projectedOverlap(const MinMax<float> &p1, const MinMax<float> &p2)
+{
+    double left = std::max(p1.min, p2.min);
+    double right = std::min(p1.max, p2.max);
+    return right - left;
+}
+
+Engine2D::Vector2D Engine2D::getCenter(const std::vector<Vector2D> &vertesies)
+{
+    Vector2D sum = Vector2D::ZERO();
+
+    for(const auto& v : vertesies)
+    {
+        sum = sum + v;
+    }
+    return sum * (1.0f / vertesies.size());
+}
+
 Engine2D::Collision Engine2D::getCollisionCircleCircle(const CircleColideData &c1, const CircleColideData &c2)
 {
     Collision collision;
@@ -24,39 +56,80 @@ Engine2D::Collision Engine2D::getCollisionCircleCircle(const CircleColideData &c
     return collision;
 }
 
-Engine2D::Collision Engine2D::getCollisionPolygonPolygon(const PolygonColideData &p1, const PolygonColideData &p2)//is not working well
+Engine2D::Collision Engine2D::getCollisionPolygonPolygon(const PolygonColideData &p1, const PolygonColideData &p2)
 {
-    std::function<bool(const PolygonColideData&, const PolygonColideData&)> isGap = [](const PolygonColideData&p1, const PolygonColideData&p2) -> bool
+    // std::function<bool(const PolygonColideData&, const PolygonColideData&)> isGap = [](const PolygonColideData&p1, const PolygonColideData&p2) -> bool
+    // {
+    //     for(size_t i = 0; i < p1.vertesies.size(); ++i)
+    //     {
+    //         const Vector2D edge = p1.vertesies[i] - p1.vertesies[(i + 1) % p1.vertesies.size()];
+    //         const Vector2D axe = Vector2D(-edge.y, edge.x).getNormalized();
+
+    //         std::vector<float> p1Projected;
+    //         std::vector<float> p2Projected;
+
+    //         p1Projected.reserve(p1.vertesies.size());
+    //         p2Projected.reserve(p2.vertesies.size());
+
+    //         for(const auto& vertex : p1.vertesies)
+    //         {
+    //             p1Projected.push_back(vertex.getDotProduct(axe));
+    //         }
+    //         for(const auto& vertex : p2.vertesies)
+    //         {
+    //             p2Projected.push_back(vertex.getDotProduct(axe));
+    //         }
+
+    //         const MinMax<float> p1MinMax = getMinMax(p1Projected);
+    //         const MinMax<float> p2MinMax = getMinMax(p2Projected);
+    //         if(p1MinMax.max < p2MinMax.min || p1MinMax.min > p2MinMax.max) return true;
+    //     }
+    //     return false;
+    // };
+    // Collision collison;
+    // collison.isCollision = !isGap(p1, p2) && !isGap(p2, p1);
+    // return collison;
+    if (p1.vertesies.size() < 3 || p2.vertesies.size() < 3) return Collision{false, Vector2D::ZERO(), 0.0f};
+
+    Collision collision;
+    collision.isCollision = true;
+    collision.collisonDepth = std::numeric_limits<float>().infinity();
+
+    std::function<void(const PolygonColideData&, const PolygonColideData&)> testEdges = [&collision](const PolygonColideData&a, const PolygonColideData&b) -> void
     {
-        for(size_t i = 0; i < p1.vertesies.size(); ++i)
+        for(size_t i = 0; i < a.vertesies.size(); ++i)
         {
-            const Vector2D edge = p1.vertesies[i] - p1.vertesies[(i + 1) % p1.vertesies.size()];
+            const Vector2D edge = a.vertesies[i] - a.vertesies[(i + 1) % a.vertesies.size()];
             const Vector2D axe = Vector2D(-edge.y, edge.x).getNormalized();
 
-            std::vector<float> p1Projected;
-            std::vector<float> p2Projected;
+            float overlap = projectedOverlap(projectVertesies(a.vertesies, axe), projectVertesies(b.vertesies, axe));
 
-            p1Projected.reserve(p1.vertesies.size());
-            p2Projected.reserve(p2.vertesies.size());
-
-            for(const auto& vertex : p1.vertesies)
+            if(overlap < 0.0f)
             {
-                p1Projected.push_back(vertex.getDotProduct(axe));
+                collision.isCollision = false;
+                return;
             }
-            for(const auto& vertex : p2.vertesies)
+            else if(overlap < collision.collisonDepth)
             {
-                p2Projected.push_back(vertex.getDotProduct(axe));
+                collision.collisonDepth = overlap;
+                collision.normal = axe;
             }
-
-            const MinMax<float> p1MinMax = getMinMax(p1Projected);
-            const MinMax<float> p2MinMax = getMinMax(p2Projected);
-            if(p1MinMax.max < p2MinMax.min || p1MinMax.min > p2MinMax.max) return true;
         }
-        return false;
     };
-    Collision collison;
-    collison.isCollision = !isGap(p1, p2) && !isGap(p2, p1);
-    return collison;
+    
+    testEdges(p1, p2);
+    if(!collision.isCollision) return collision;
+
+    testEdges(p2, p1);
+    if(!collision.isCollision) return collision;
+
+    Vector2D distance = getCenter(p1.vertesies) - getCenter(p2.vertesies);
+
+    float direction = collision.normal.getDotProduct(distance);
+    
+    if(direction < 0.0f) collision.normal = -collision.normal;
+
+    return collision;
 }
 
 Engine2D::Collision Engine2D::getCollisionCirclePolygon(const CircleColideData &c, const PolygonColideData &p)

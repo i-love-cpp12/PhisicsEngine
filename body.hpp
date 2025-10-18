@@ -61,7 +61,7 @@ namespace Engine2D
         public:
             PolygonBody(const Vector2D& position, float width, float height, float rotation, const PhysicsProperties& properties);
 
-            PolygonBody(const Vector2D& position, std::vector<Vector2D> localVertecies, float rotation, const PhysicsProperties& properties);
+            PolygonBody(const Vector2D& position, const std::vector<Vector2D>& localVertecies, float rotation, const PhysicsProperties& properties);
 
             void draw(Color color = WHITE, float strokeSize = 0.0f) const override;
             Collision getCollision(const Body& body) const override;

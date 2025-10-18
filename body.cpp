@@ -61,7 +61,7 @@ Engine2D::Collision Engine2D::CircleBody::getCollision(const Body &body) const
         case polygon:
         {
             const PolygonBody& otherPolygon = static_cast<const PolygonBody&>(body);
-            return getCollisionCirclePolygon({position, radius}, {otherPolygon.getPosition(), otherPolygon.getVertesies()});
+            return getCollisionCirclePolygon({position, radius}, {otherPolygon.getVertesies()});
         }
         break;
     };
@@ -80,12 +80,13 @@ Engine2D::PolygonBody::PolygonBody(const Vector2D &position, float width, float 
     appliedVertecies.resize(localVertecies.size());
 }
 
-Engine2D::PolygonBody::PolygonBody(const Vector2D& position, std::vector<Vector2D> localVertecies, float rotation, const PhysicsProperties& properties):
+Engine2D::PolygonBody::PolygonBody(const Vector2D& position, const std::vector<Vector2D>& localVertecies, float rotation, const PhysicsProperties& properties):
     Engine2D::Body::Body(position, rotation, polygon, properties),
     localVertecies(localVertecies)
 {
     appliedVertecies.resize(localVertecies.size());
 }
+
 
 void Engine2D::PolygonBody::draw(Color color, float strokeSize) const
 {
@@ -103,14 +104,14 @@ Engine2D::Collision Engine2D::PolygonBody::getCollision(const Body &body) const
         case circle:
         {
             const CircleBody& otherCircle = static_cast<const CircleBody&>(body);
-            return getCollisionCirclePolygon({otherCircle.getPosition(), otherCircle.getRadius()}, {position, getVertesies()});
+            return getCollisionCirclePolygon({otherCircle.getPosition(), otherCircle.getRadius()}, {getVertesies()});
         }
         break;
 
         case polygon:
         {
             const PolygonBody& otherPolygon = static_cast<const PolygonBody&>(body);
-            return getCollisionPolygonPolygon({position, getVertesies()}, {otherPolygon.position, otherPolygon.getVertesies()});
+            return getCollisionPolygonPolygon({getVertesies()}, {otherPolygon.getVertesies()});
         }
         break;
     };

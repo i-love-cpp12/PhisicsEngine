@@ -4,6 +4,7 @@
 #include<vector>
 #include"math.hpp"
 #include<functional>
+#include <limits>
 
 namespace Engine2D
 {
@@ -21,9 +22,12 @@ namespace Engine2D
     };
     struct PolygonColideData
     {
-        Vector2D pos;
         std::vector<Vector2D> vertesies;
     };
+
+    MinMax<float> projectVertesies(const std::vector<Vector2D>& vertesies, const Vector2D axe);
+    float projectedOverlap(const MinMax<float>& p1, const MinMax<float>& p2);
+    Vector2D getCenter(const std::vector<Vector2D>& vertesies);
 
     Collision getCollisionCircleCircle(const CircleColideData& c1, const CircleColideData& c2);
     Collision getCollisionPolygonPolygon(const PolygonColideData& p1, const PolygonColideData& p2);

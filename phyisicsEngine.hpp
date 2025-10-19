@@ -19,7 +19,7 @@ namespace Engine2D
             void draw() const;
             void update();
         private:
-            std::vector<std::unique_ptr<PolygonBody>> bodies;
+            std::vector<std::unique_ptr<Body>> bodies;
             std::vector<Color> colors;
     };
 };

@@ -68,8 +68,8 @@ Engine2D::Collision Engine2D::getCollisionPolygonPolygon(const PolygonColideData
     {
         for(size_t i = 0; i < a.vertesies.size(); ++i)
         {
-            const Vector2D edge = a.vertesies[i] - a.vertesies[(i + 1) % a.vertesies.size()];
-            const Vector2D axe = edge.perp().getNormalized();
+            Vector2D edge = a.vertesies[(i + 1) % a.vertesies.size()] - a.vertesies[i];
+            Vector2D axe = edge.perp().getNormalized();
 
             float overlap = projectedOverlap(projectVertesies(a.vertesies, axe), projectVertesies(b.vertesies, axe));
 
@@ -103,5 +103,46 @@ Engine2D::Collision Engine2D::getCollisionPolygonPolygon(const PolygonColideData
 
 Engine2D::Collision Engine2D::getCollisionCirclePolygon(const CircleColideData &c, const PolygonColideData &p)
 {
-    return Collision();
+    Collision collision;
+    collision.isCollision = true;
+    collision.collisonDepth = std::numeric_limits<float>::infinity();
+    Vector2D direction = (c.pos - getCenter(p.vertesies)).getNormalized();
+
+    std::function<void(const Vector2D&)> helper = [&c, &p, &collision, &direction](const Vector2D& axe) -> void
+    {
+        MinMax<float> projectedPolygon = projectVertesies(p.vertesies, axe);
+
+        float centerProj = c.pos.getDotProduct(axe);
+        MinMax<float> projectedCircle;
+        projectedCircle.min = centerProj - c.radius;
+        projectedCircle.max = centerProj + c.radius;
+
+        float overlap = projectedOverlap(projectedPolygon, projectedCircle);
+
+        if(overlap < 0.0f)
+        {
+            collision.isCollision = false;
+            return;
+        }
+        else if(overlap < collision.collisonDepth)
+        {
+            collision.collisonDepth = overlap;
+            collision.normal = axe;
+        }
+    };
+
+    for(size_t i = 0; i < p.vertesies.size(); ++i)
+    {
+        Vector2D edge = p.vertesies[(i + 1) % p.vertesies.size()] - p.vertesies[i];
+        Vector2D axe = edge.perp().getNormalized();
+
+        helper(axe);
+
+        if(!collision.isCollision) return collision;
+    }
+    helper(direction);
+
+    if(collision.normal.getDotProduct(direction) > 0.0f)
+        collision.normal = -collision.normal;
+    return collision;
 }

@@ -24,10 +24,6 @@ namespace Engine2D
             float rotation;//deg
             float angularVelocity;//deg/s
             PhysicsProperties properties;
-            // float weight;//kg
-            // float dencity;//kg/m 
-            // float restitution;// 0-1
-            // bool isStatic;
 
             BodyType type;
             bool movementNotApplied;

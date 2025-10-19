@@ -7,10 +7,7 @@ Engine2D::PhyisicsEngine::PhyisicsEngine(const Vector2D &windowsSize, const std:
 
     bodies.push_back(std::make_unique<PolygonBody>(Vector2D{100.0f, 100.0f}, 100.0f, 130.0f, 0.0f, PhysicsProperties{1.0f}));
     bodies.push_back(std::make_unique<PolygonBody>(Vector2D{500.0f, 100.0f}, 100.0f, 150.0f, 0.0f, PhysicsProperties{1.0f}));
-    bodies.push_back(std::make_unique<PolygonBody>(
-        Vector2D{300.0f, 300.0f},
-        std::vector<Vector2D>{Vector2D{-50.0f, -50.0f}, Vector2D{50.0f, -50.0f}, Vector2D{-10.0f, 50.0f}}, 0.0f, PhysicsProperties{1.0f}
-    ));
+    bodies.push_back(std::make_unique<CircleBody>(Vector2D{700.0f, 100.0f}, 50.0f, PhysicsProperties{1.0f}));
 }
 
 Engine2D::PhyisicsEngine::~PhyisicsEngine()

@@ -19,6 +19,7 @@ namespace Engine2D
     {
         protected:
             Body(const Vector2D& position, float rotation, BodyType type, const PhysicsProperties& properties);
+            virtual ~Body() = default;
             Vector2D position;//m
             Vector2D linearVelocity;//m/s
             float rotation;//deg

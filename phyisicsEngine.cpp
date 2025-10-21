@@ -15,20 +15,21 @@ Engine2D::PhyisicsEngine::~PhyisicsEngine()
     CloseWindow();
 }
 
-void Engine2D::PhyisicsEngine::update()
+void Engine2D::PhyisicsEngine::takeStep()
 {
     Vector2D input =
         Vector2D((float)(IsKeyDown(KEY_D)) - (float)(IsKeyDown(KEY_A)),
                 (float)(IsKeyDown(KEY_S)) - (float)(IsKeyDown(KEY_W)))
                 .getNormalized();
-    const float SPEED = 200.0f;
+    const float SPEED = 10.0f;
     const float dt = GetFrameTime();
 
-    bodies[0]->moveBy(input * SPEED * dt);
+    bodies[0]->addForce(input * SPEED);
     bodies[2]->rotateBy(10.0f * dt);
 
     for(size_t i = 0; i < bodies.size() - 1; ++i)
     {
+        bodies[i]->takeStep(dt);
         for(size_t j = i + 1; j < bodies.size(); ++j)
         {
             // colors[i] = BLACK;

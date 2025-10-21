@@ -19,16 +19,17 @@ namespace Engine2D
     {
         protected:
             Body(const Vector2D& position, float rotation, BodyType type, const PhysicsProperties& properties);
-            virtual ~Body() = default;
             Vector2D position;//m
             Vector2D linearVelocity;//m/s
             float rotation;//deg
             float angularVelocity;//deg/s
             PhysicsProperties properties;
-
+            
             BodyType type;
             bool movementNotApplied;
+            void applyVelocity(float dt);
         public:
+            virtual ~Body() = default;
             virtual void draw(Color color = WHITE, float strokeSize = 0.0f) const = 0;
             virtual Collision getCollision(const Body& body) const = 0;
             BodyType getType() const {return type;}
@@ -38,6 +39,8 @@ namespace Engine2D
             void moveBy(const Vector2D& amount);
             void rotateTo(float newRotation);
             void rotateBy(float amount);
+            void addForce(const Vector2D force);
+            void takeStep(float dt);
     };
 
     class CircleBody: public Body

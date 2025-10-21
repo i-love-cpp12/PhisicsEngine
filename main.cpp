@@ -10,7 +10,7 @@ int main()
     PhyisicsEngine engine(Vector2D{1200.0f, 700.0f}, "phisicsEngine", 60);
     while(!WindowShouldClose())
     {
-        engine.update();
+        engine.takeStep();
         engine.draw();
     }
 

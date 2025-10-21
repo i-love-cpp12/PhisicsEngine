@@ -17,7 +17,7 @@ namespace Engine2D
             PhyisicsEngine(const Vector2D& windowsSize, const std::string& title, unsigned short FPS);
             ~PhyisicsEngine();
             void draw() const;
-            void update();
+            void takeStep();
         private:
             std::vector<std::unique_ptr<Body>> bodies;
             std::vector<Color> colors;

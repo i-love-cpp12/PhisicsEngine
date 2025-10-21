@@ -11,7 +11,15 @@ Engine2D::Body::Body(const Vector2D& position, float rotation, BodyType type, co
 {
 }
 
-void Engine2D::Body::moveTo(const Vector2D& newPos)
+void Engine2D::Body::applyVelocity(float dt)
+{
+    moveBy(linearVelocity * dt);
+    rotateBy(angularVelocity * dt);
+
+    movementNotApplied = true;
+}
+
+void Engine2D::Body::moveTo(const Vector2D &newPos)
 {
     position = newPos;
     movementNotApplied = true;
@@ -33,6 +41,16 @@ void Engine2D::Body::rotateBy(float amount)
 {
     rotation += amount;
     movementNotApplied = true;
+}
+
+void Engine2D::Body::addForce(const Vector2D force)
+{
+    linearVelocity = linearVelocity + force;
+}
+
+void Engine2D::Body::takeStep(float dt)
+{
+    applyVelocity(dt);
 }
 
 Engine2D::CircleBody::CircleBody(const Vector2D& position, float radius, const PhysicsProperties& properties):

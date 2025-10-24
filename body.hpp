@@ -38,7 +38,7 @@ namespace Engine2D
             const Vector2D& getPosition() const {return position;}
             const PhysicsProperties& getProperties() const {return properties;}
             const Vector2D& getLinearVelocity() const {return linearVelocity;}
-            void addVelocity(const Vector2D& velocity);
+            void addLinearVelocity(const Vector2D& velocity);
 
             void moveTo(const Vector2D& newPos);
             void moveBy(const Vector2D& amount);

@@ -19,7 +19,7 @@ void Engine2D::Body::applyVelocity(float dt)
     movementNotApplied = true;
 }
 
-void Engine2D::Body::addVelocity(const Vector2D &velocity)
+void Engine2D::Body::addLinearVelocity(const Vector2D &velocity)
 {
     linearVelocity = linearVelocity + velocity;
 }
@@ -118,7 +118,7 @@ void Engine2D::PolygonBody::draw(Color color, float strokeSize) const
     std::vector<Vector2D> vertesies = getVertesies();
     for(size_t i = 0; i < vertesies.size(); ++i)
     {
-        DrawLineV(vertesies[i].toRaylibVector(), vertesies[(i + 1) % vertesies.size()].toRaylibVector(), color);
+        DrawLineV(vertesies[i].toRaylibVector(), vertesies[(i + 1) % vertesies.size()].toRaylibVector(), BLACK);
     }
 }
 

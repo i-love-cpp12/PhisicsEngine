@@ -19,6 +19,11 @@ void Engine2D::Body::applyVelocity(float dt)
     movementNotApplied = true;
 }
 
+void Engine2D::Body::addVelocity(const Vector2D &velocity)
+{
+    linearVelocity = linearVelocity + velocity;
+}
+
 void Engine2D::Body::moveTo(const Vector2D &newPos)
 {
     position = newPos;
@@ -43,13 +48,15 @@ void Engine2D::Body::rotateBy(float amount)
     movementNotApplied = true;
 }
 
-void Engine2D::Body::addForce(const Vector2D force)
+void Engine2D::Body::addForce(const Vector2D& amount)
 {
-    linearVelocity = linearVelocity + force;
+    force = force + amount;
 }
 
 void Engine2D::Body::takeStep(float dt)
 {
+    linearVelocity = linearVelocity + force;
+    force = Vector2D::ZERO();
     applyVelocity(dt);
 }
 

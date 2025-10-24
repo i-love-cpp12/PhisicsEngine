@@ -38,6 +38,10 @@ namespace Engine2D
 
             Vector2D multiply(float scalar) const;
             Vector2D operator*(float scalar) const;
+
+            Vector2D devide(float scalar) const;
+            Vector2D operator/(float scalar) const;
+
         
             float distance(const Vector2D &other) const;
 

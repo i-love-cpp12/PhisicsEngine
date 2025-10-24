@@ -6,7 +6,7 @@
             "command": "C:/w64devkit/bin/g++.exe",
             "args": [
                 "main.cpp",
-                "phyisicsEngine.cpp",
+                "physicsEngine.cpp",
                 "vector2d.cpp",
                 "body.cpp",
                 "collisions.cpp",

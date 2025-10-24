@@ -87,6 +87,16 @@ Vector2D Engine2D::Vector2D::operator*(float scalar) const
     return multiply(scalar);
 }
 
+Vector2D Engine2D::Vector2D::devide(float scalar) const
+{
+    return Vector2D(x / scalar, y / scalar);
+}
+
+Vector2D Engine2D::Vector2D::operator/(float scalar) const
+{
+    return devide(scalar);
+}
+
 float Engine2D::Vector2D::distance(const Vector2D &other) const
 {
     const Vector2D diff = *this - other;

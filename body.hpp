@@ -21,6 +21,7 @@ namespace Engine2D
             Body(const Vector2D& position, float rotation, BodyType type, const PhysicsProperties& properties);
             Vector2D position;//m
             Vector2D linearVelocity;//m/s
+            Vector2D force;
             float rotation;//deg
             float angularVelocity;//deg/s
             PhysicsProperties properties;
@@ -31,15 +32,19 @@ namespace Engine2D
         public:
             virtual ~Body() = default;
             virtual void draw(Color color = WHITE, float strokeSize = 0.0f) const = 0;
+            
             virtual Collision getCollision(const Body& body) const = 0;
-            BodyType getType() const {return type;}
-            Vector2D getPosition() const {return position;}
-            float getWeight() const {return properties.weight;}
+            const BodyType& getType() const {return type;}
+            const Vector2D& getPosition() const {return position;}
+            const PhysicsProperties& getProperties() const {return properties;}
+            const Vector2D& getLinearVelocity() const {return linearVelocity;}
+            void addVelocity(const Vector2D& velocity);
+
             void moveTo(const Vector2D& newPos);
             void moveBy(const Vector2D& amount);
             void rotateTo(float newRotation);
             void rotateBy(float amount);
-            void addForce(const Vector2D force);
+            void addForce(const Vector2D& amount);
             void takeStep(float dt);
     };
 

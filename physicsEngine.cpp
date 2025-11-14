@@ -28,7 +28,8 @@ void Engine2D::PhysicsEngine::takeStep()
     const float SPEED = 200.0f;
     const float dt = GetFrameTime();
 
-    bodies[0]->addLinearVelocity(input * SPEED * dt);
+    bodies[0]->moveBy(input * SPEED * dt);
+    //bodies[0]->addLinearVelocity(input * SPEED * dt);
     bodies[1]->rotateBy(10.0f * dt);
 
     for(size_t i = 0; i < bodies.size(); ++i)
